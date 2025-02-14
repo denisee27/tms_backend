@@ -43,7 +43,7 @@ exports.updateMark = async (req, res) => {
             return res.status(404).json({ message: "Data not found" });
         }
         await task.update({ status });
-        res.json({ message: "ok" });
+        res.status(200).json({ message: "ok" });
     } catch (error) {
         console.error("Error updating status:", error);
         res.status(500).json({ message: "Internal server error" });
@@ -72,7 +72,6 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
     const schema = Joi.object({
-        id: Joi.string().max(255).required(),
         title: Joi.string().max(255).required(),
         description: Joi.string().min(10).max(200).required(),
         due_date: Joi.string().pattern(/^\d{4}-\d{2}-\d{2}$/).required()
