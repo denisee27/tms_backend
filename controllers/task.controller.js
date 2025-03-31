@@ -2,11 +2,13 @@ const db = require("../models");
 const Joi = require("joi");
 const Task = db.task;
 
+
 exports.findAll = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const sortDueDate = req.query.sortDueDate || null;
     const offset = (page - 1) * limit;
+
     try {
         const { count, rows } = await Task.findAndCountAll({
             limit,
@@ -14,15 +16,16 @@ exports.findAll = async (req, res) => {
             order: sortDueDate ? [["due_date", sortDueDate]] : [["createdAt", "ASC"]],
         });
 
-        res.send({
+        res.json({
             data: rows,
             totalData: count,
             totalPages: Math.ceil(count / limit),
-            currentPage: parseInt(page)
+            currentPage: page,
         });
     } catch (err) {
-        res.status(500).send({
-            message: err.message || "Some error occurred while retrieving data."
+        res.status(500).json({
+            message: "Something went wrong",
+            error: err.message
         });
     }
 };

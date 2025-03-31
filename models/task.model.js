@@ -1,4 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
+    const paginate = require("sequelize-paginate");
     const Task = sequelize.define("tasks", {
         id: {
             type: Sequelize.UUID,
@@ -24,6 +25,7 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.DATE
         }
     });
+    paginate.paginate(Task);
 
     return Task;
 };
