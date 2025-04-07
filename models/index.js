@@ -1,7 +1,7 @@
 const dbConfig = require("../config/db.config.js");
 
 const Sequelize = require("sequelize");
-const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
+const sequelizeConfig = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
   dialect: dbConfig.dialect,
   operatorsAliases: false,
@@ -17,7 +17,8 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
 const db = {};
 
 db.Sequelize = Sequelize;
-db.sequelize = sequelize;
-db.task = require("./task.model.js")(sequelize, Sequelize);
+db.sequelize = sequelizeConfig;
+db.task = require("./task.model.js")(sequelizeConfig, Sequelize);
+db.user = require("./user.model.js")(sequelizeConfig, Sequelize);
 
 module.exports = db;

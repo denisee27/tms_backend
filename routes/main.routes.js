@@ -11,6 +11,6 @@ router.post("/tasks/create", taskController.create);
 router.put("/tasks/update/:id", taskController.update);
 router.delete("/tasks/delete/:id", taskController.delete);
 router.patch("/tasks/mark/:id", taskController.updateMark);
-router.post("auth/login", authController.login)
-router.post("auth/register", authController.register)
+router.post("/auth/login", authController.login)
+router.post("/auth/register", authController.register)
 module.exports = router;
