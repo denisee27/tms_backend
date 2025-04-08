@@ -1,10 +1,11 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const Joi = require("joi");
 const db = require("../models");
 const User = db.user;
-const jwt = require("jsonwebtoken");
+const multer = require('multer');
+const form = multer();
 
-const SECRET_KEY = "lQD6GWwN/Chk0Uo6G0OL + Xu0Dcfg8VTIBHQu1hsEH2e1MNUlddJPtE5tGWcuOOLaaIwfg1yJcfnif4JKcdOwGg==";
 exports.register = async (req, res) => {
     const schema = Joi.object({
         email: Joi.string().email().required(),
@@ -30,12 +31,16 @@ exports.register = async (req, res) => {
         });
         return res.status(200).json({ message: "ok" });
     } catch (err) {
-        console.error("Register error:", err);
-        return res.status(500).json({ message: "Internal Server Error" });
+        console.log("Register error:", err);
+        return res.status(500).json({
+            message: "Internal Server Error",
+            error: err.message
+        });
     }
 };
 
-exports.login = async (req, res) => {
+exports.login = [form.none(),
+async (req, res) => {
     const schema = Joi.object({
         email: Joi.string().email().required(),
         password: Joi.string().required()
@@ -56,20 +61,25 @@ exports.login = async (req, res) => {
         }
         const token = jwt.sign(
             { id: user.id, email: user.email },
-            SECRET_KEY,
+            process.env.SECRET_KEY,
             { expiresIn: "1h" }
         );
         res.status(200).json({
             message: "ok",
-            token,
-            user: {
-                id: user.id,
-                email: user.email
+            result: {
+                access_token: token,
+                token_type: "Bearer",
+                timeout: 3600,
+                user: {
+                    name: user.name,
+                    email: user.email
+                }
             }
         });
     } catch (err) {
         res.status(500).json({
             message: "Internal Server Error",
+            error: err.message
         });
     }
-};
+}];
