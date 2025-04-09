@@ -31,7 +31,6 @@ exports.register = async (req, res) => {
         });
         return res.status(200).json({ message: "ok" });
     } catch (err) {
-        console.log("Register error:", err);
         return res.status(500).json({
             message: "Internal Server Error",
             error: err.message
@@ -47,17 +46,28 @@ async (req, res) => {
     });
     const { error } = schema.validate(req.body);
     if (error) {
-        return res.status(400).json({ message: error.details[0].message });
-    }
+        return res.status(400).json({
+            status: 400, wrong: error.details.context.key, message: error.details[0].message
+        })
+    };
+
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ where: { email } });
         if (!user) {
-            return res.status(442).json({ message: "Email or Password is incorrect" });
+            return res.status(442).json({
+                status: 422,
+                wrong:
+                    { email: "Email or Password is incorrect" }
+            });
         }
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(442).json({ message: "Email or Password is incorrect" });
+            return res.status(442).json({
+                status: 422,
+                wrong:
+                    { password: "Email or Password is incorrect" }
+            });
         }
         const token = jwt.sign(
             { id: user.id, email: user.email },

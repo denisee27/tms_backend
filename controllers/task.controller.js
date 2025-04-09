@@ -46,7 +46,6 @@ exports.updateMark = async (req, res) => {
         await task.update({ status });
         res.status(200).json({ message: "ok" });
     } catch (error) {
-        console.error("Error updating status:", error);
         res.status(500).json({ message: "Internal server error" });
     }
 }
@@ -66,7 +65,6 @@ exports.create = async (req, res) => {
         await Task.create({ title, description, due_date });
         res.status(200).json({ message: "ok" });
     } catch (error) {
-        console.error("Error creating task:", error);
         res.status(500).json({ message: "Internal server error" });
     }
 };
@@ -100,7 +98,6 @@ exports.update = async (req, res) => {
 
         res.json({ message: "ok" });
     } catch (error) {
-        console.error("Error updating task:", error);
         res.status(500).json({ message: "Internal server error" });
     }
 };
@@ -115,7 +112,6 @@ exports.delete = async (req, res) => {
         await task.destroy();
         res.json({ message: "Data deleted successfully" });
     } catch (error) {
-        console.error("Error deleting data:", error);
         res.status(500).json({ message: "Internal server error" });
     }
 };
