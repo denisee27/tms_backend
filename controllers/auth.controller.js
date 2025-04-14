@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Joi = require("joi");
-const db = require("../models");
+const db = require("../config/db.config.js");
 const User = db.user;
 const multer = require('multer');
 const form = multer();
@@ -71,7 +71,7 @@ async (req, res) => {
         }
         const token = jwt.sign(
             { id: user.id, email: user.email },
-            process.env.SECRET_KEY,
+            process.env.JWT_SECRET_KEY,
             { expiresIn: "1h" }
         );
         res.status(200).json({

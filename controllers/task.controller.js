@@ -1,8 +1,9 @@
-const db = require("../models");
+const db = require("../config/db.config.js");
 const Joi = require("joi");
 const Task = db.task;
 
 exports.findAll = async (req, res) => {
+    console.log(Object.keys(db));
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const sortDueDate = req.query.sortDueDate || null;
@@ -12,7 +13,7 @@ exports.findAll = async (req, res) => {
         const { count, rows } = await Task.findAndCountAll({
             limit,
             offset,
-            order: sortDueDate ? [["due_date", sortDueDate]] : [["createdAt", "ASC"]],
+            order: sortDueDate ? [["due_date", sortDueDate]] : [["createdAt", "DESC"]],
         });
         res.json({
             data: rows,

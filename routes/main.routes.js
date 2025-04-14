@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const taskController = require("../controllers/task.controller");
 const authController = require("../controllers/auth.controller");
+const authenticateMiddleware = require("../middleware/authenticate.middleware");
 
 router.get("/", (res) => {
     res.json({ message: "API Running" });
