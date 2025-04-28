@@ -3,7 +3,6 @@ const Joi = require("joi");
 const Task = db.task;
 
 exports.findAll = async (req, res) => {
-    console.log(Object.keys(db));
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const sortDueDate = req.query.sortDueDate || null;
