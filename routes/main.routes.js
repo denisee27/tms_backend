@@ -19,6 +19,7 @@ task.patch("/mark/:id", authenticateMiddleware, taskController.updateMark);
 const navigation = express.Router();
 router.use('/navigations', navigation);
 navigation.get("/", authenticateMiddleware, navigationController.findAll);
+navigation.post("/create", authenticateMiddleware, navigationController.findAll);
 
 
 router.post("/auth/login", authController.login)
